@@ -5,7 +5,7 @@
 	 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<header><img src="logo1.png" alt="logo"></img></header>
+<header><img src="Logo1.png" alt="logo"></img></header>
 
 <body>
 	<div class= "form-container">
