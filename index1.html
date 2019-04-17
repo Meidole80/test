@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+
+
+  <div id="app">
+    <v-app>
+      <template>
+  <v-card
+    flat
+    tile
+  >
+    <v-toolbar
+      color="dark"
+      dark
+    >
+      <v-toolbar-side-icon></v-toolbar-side-icon>
+
+      <v-toolbar-title>YOP Store!</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>search</v-icon>
+        <v-icon>account_circle</v-icon>
+        <v-btn color="red"><v-icon>shopping_cart</v-icon></v-btn>
+      </v-btn>
+    </v-toolbar>
+
+    <v-container
+      v-for="type in types"
+      :key="type"
+      fluid
+      grid-list-md
+      grey
+      lighten-4
+    >
+      <v-subheader>{{ type }}</v-subheader>
+
+      <v-layout row wrap>
+        <v-spacer></v-spacer>
+        <v-flex
+          v-for="card in cards"
+          :key="card"
+          xs12
+          sm6
+          md4
+        >
+          <v-hover>
+    <v-card
+      slot-scope="{ hover }"
+      class="mx-auto"
+      color="grey lighten-4"
+      max-width="600"
+    >
+      <img
+        :aspect-ratio="16/9"
+        :src="card.picture"
+      >
+        <v-expand-transition>
+          <div
+            v-if="hover"
+            class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
+            style="height: 100%;"
+          >
+            {{card.price}}$
+            
+          </div>
+        </v-expand-transition>
+      </v-img>
+      <v-card-text
+        class="pt-4"
+        style="position: relative;"
+      >
+        <v-btn
+          absolute
+          color="orange"
+          class="white--text"
+          fab
+          large
+          right
+          top
+        >
+          <v-icon>visibility</v-icon>
+        </v-btn>
+        <div class="font-weight-light grey--text title mb-2">{{card.category}}</div>
+        <h3 class="display-1 font-weight-light orange--text mb-2">{{card.productName}}</h3>
+        <div class="font-weight-light grey--text title mb-2">{{card.add_date}}</div>
+        <div class="font-weight-light title mb-2">{{card.description}} </div>
+        <div class="font-weight-light grey--text title mb-2">{{card.city}}-{{card.postalCode}}</div>
+
+        
+
+      </v-card-text>
+    </v-card>
+  </v-hover>
+</v-flex>
+</v-layout>
+</v-container>
+
+<div class="text-xs-center">
+    <v-pagination
+      v-model="page"
+      :length="4"
+      circle
+    ></v-pagination>
+  </div>
+
+</template>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+  <script>
+    new Vue({ el: '#app',
+      data: () => ({
+      types: ['Années 90', 'Places to See'],
+      cards: ['Good', 'Best', 'Finest'],
+      socials: [
+        {
+          icon: 'fab fa-facebook',
+          color: 'indigo'
+        },
+        {
+          icon: 'fab fa-linkedin',
+          color: 'cyan darken-1'
+        },
+        {
+          icon: 'fab fa-instagram',
+          color: 'red lighten-3'
+        }
+      ],
+      page: 1
+    }),
+
+    methods: {
+      getImage () {
+        const min = 550
+        const max = 560
+
+        return Math.floor(Math.random() * (max - min + 1)) + min
+      },
+      getProductList() {
+        fetch('https://cesitest-73b3e.firebaseio.com/products.json')
+        .then(response => response.json())
+        .then(json => {
+          json.forEach(currentProduct => {
+            currentProduct.add_date = moment(currentProduct.add_date).format('DD/MM/YYYY')
+          })
+          this.cards = json
+        })
+      }
+    },
+      mounted() {
+       this.getProductList()
+      }
+     
+
+  })
+
+    
+
+
+
+  </script>
+
+<style>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .5;
+  position: absolute;
+  width: 100%;
+}
+.shopping-cart {
+  color: red;
+}
+</style>
+
+</body>
+</html>
